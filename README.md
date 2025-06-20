@@ -17,7 +17,7 @@ Built with:
 ## 🎥 Demo Video
 
 Watch a walkthrough of the chatbot and its features:  
-[![Watch the Demo](https://img.youtube.com/vi/YOUR_VIDEO_ID/0.jpg)](https://www.youtube.com/watch?v=YOUR_VIDEO_ID)
+[![Watch the Demo]([https://img.youtube.com/vi/YOUR_VIDEO_ID/0.jpg)](https://www.youtube.com/watch?v=YOUR_VIDEO_ID](https://drive.google.com/file/d/1jL_tZvo8A8YF67HkJiiSiJqUx0Mih4WE/view?usp=sharing))
 
 ---
 
