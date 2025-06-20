@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pneuma - AI Flight Assistant Demo</title>
+
+  <style>
+            * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8fafc;
+            min-height: 100vh;
+            color: #334155;
+            line-height: 1.6;
+        }
+
+        .top-bar {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+            padding: 8px 0;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .header {
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 20px 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #3b82f6, #1e40af);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .company-info h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 4px;
+        }
+
+        .company-info p {
+            color: #64748b;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .header-badge {
+            background: #f1f5f9;
+            color: #475569;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            border: 1px solid #e2e8f0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 40px;
+        }
+
+        .main-section {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03);
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+        }
+
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .demo-header {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            padding: 24px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .demo-header h2 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+
+        .demo-header p {
+            color: #64748b;
+            font-size: 16px;
+        }
+
+        .quick-actions {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0;
+        }
+
+        .quick-actions h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .test-button {
+            background: white;
+            border: 2px solid #e2e8f0;
+            padding: 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: left;
+            font-size: 14px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .test-button:hover {
+            border-color: #3b82f6;
+            box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .test-button h4 {
+            color: #1e293b;
+            font-weight: 600;
+            margin-bottom: 6px;
+            font-size: 15px;
+        }
+
+        .test-button p {
+            color: #64748b;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        .status-panel {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0;
+        }
+
+        .status-panel h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 12px;
+        }
+
+        .status-message {
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .status.success {
+            background: #dcfce7;
+            color: #166534;
+            border: 1px solid #bbf7d0;
+        }
+
+        .status.error {
+            background: #fef2f2;
+            color: #dc2626;
+            border: 1px solid #fecaca;
+        }
+
+        .status.loading {
+            background: #f1f5f9;
+            color: #475569;
+            border: 1px solid #cbd5e1;
+        }
+
+        .chat-container {
+            background: #f8fafc;
+            border-radius: 0;
+            min-height: 500px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+            color: white;
+            padding: 20px 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .chat-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            backdrop-filter: blur(10px);
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            overflow-y: auto;
+            max-height: 400px;
+            scroll-behavior: smooth;
+        }
+
+        .message {
+            max-width: 75%;
+            padding: 14px 18px;
+            border-radius: 16px;
+            font-size: 15px;
+            line-height: 1.5;
+            word-wrap: break-word;
+        }
+
+        .user-message {
+            background: #3b82f6;
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+            box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
+        }
+
+        .bot-message {
+            background: white;
+            border: 1px solid #e2e8f0;
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            color: #374151;
+        }
+
+        .input-section {
+            padding: 24px;
+            background: white;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .input-container {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        #messageInput {
+            flex: 1;
+            padding: 14px 18px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 15px;
+            outline: none;
+            transition: border-color 0.2s;
+            background: #f8fafc;
+        }
+
+        #messageInput:focus {
+            border-color: #3b82f6;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        #sendButton {
+            background: linear-gradient(135deg, #3b82f6, #1e40af);
+            color: white;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 15px;
+            transition: all 0.2s;
+            box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
+        }
+
+        #sendButton:hover:not(:disabled) {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3);
+        }
+
+        #sendButton:disabled {
+            background: #cbd5e1;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .typing-indicator {
+            display: none;
+            align-items: center;
+            gap: 10px;
+            color: #64748b;
+            font-style: italic;
+            padding: 16px 0;
+            align-self: flex-start;
+            font-size: 14px;
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 4px;
+        }
+
+        .typing-dots div {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #10b981;
+            animation: typing 1.4s infinite ease-in-out;
+        }
+
+        .typing-dots div:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dots div:nth-child(2) { animation-delay: -0.16s; }
+        .typing-dots div:nth-child(3) { animation-delay: 0s; }
+
+        @keyframes typing {
+            0%, 80%, 100% { transform: scale(0.8); opacity: 0.4; }
+            40% { transform: scale(1); opacity: 1; }
+        }
+
+        .info-panel {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0;
+        }
+
+        .info-panel h3 {
+            color: #1e293b;
+            margin-bottom: 16px;
+            font-size: 18px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .info-panel ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .info-panel li {
+            padding: 10px 0;
+            border-bottom: 1px solid #f1f5f9;
+            color: #64748b;
+            font-size: 14px;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .info-panel li:last-child {
+            border-bottom: none;
+        }
+
+        .info-panel li::before {
+            content: "•";
+            color: #3b82f6;
+            font-weight: bold;
+            font-size: 16px;
+            margin-top: 2px;
+        }
+
+        .footer {
+            background: #1e293b;
+            color: #94a3b8;
+            text-align: center;
+            padding: 24px;
+            margin-top: 40px;
+        }
+
+        .footer p {
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+                gap: 24px;
+                padding: 20px;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 16px;
+                text-align: center;
+            }
+            
+            .company-info h1 {
+                font-size: 24px;
+            }
+        }
+
+    #apiKeyModal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+
+    .modal-box {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      max-width: 400px;
+      width: 100%;
+    }
+
+    .modal-box h3 {
+      margin-bottom: 15px;
+      font-size: 20px;
+      color: #1e293b;
+    }
+
+    .modal-box input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 14px;
+      margin-bottom: 15px;
+    }
+
+    .modal-box button {
+      width: 100%;
+      padding: 12px;
+      background: #3b82f6;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="top-bar">
+    🎯 Demo Environment - Experience Pneuma's AI-Powered Flight Assistant
+  </div>
+
+  <div class="header">
+    <div class="header-content">
+      <div class="logo-section">
+        <div class="logo">P</div>
+        <div class="company-info">
+          <h1>Pneuma</h1>
+          <p>Smart Flight Booking & Travel Rewards</p>
+        </div>
+      </div>
+      <div class="header-badge">AI Assistant Demo</div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="main-section">
+      <div class="demo-header">
+        <h2>WhatsApp AI Assistant</h2>
+        <p>Experience our intelligent flight booking assistant that helps you find the best deals and manage your travel rewards.</p>
+      </div>
+
+      <div class="status-message" id="statusMessage"></div>
+
+      <div class="chat-container">
+        <div class="chat-header">
+          <div class="chat-avatar">🤖</div>
+          Pneuma Assistant
+        </div>
+        <div class="chat-messages" id="chatMessages">
+          <div class="bot-message message">
+            Hello! I'm your Pneuma travel assistant. I can help you find the best flight deals, transfer points between loyalty programs, and answer questions about our services. How can I assist you today?
+          </div>
+        </div>
+        <div class="typing-indicator" id="typingIndicator">
+          <div class="typing-dots">
+            <div></div><div></div><div></div>
+          </div>
+          Assistant is typing...
+        </div>
+        <div class="input-section">
+          <div class="input-container">
+            <input type="text" id="messageInput" placeholder="Ask about flights, deals, or rewards...">
+            <button id="sendButton">Send</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sidebar">
+      <div class="quick-actions">
+        <h3>⚡ Quick Actions</h3>
+        <div class="action-buttons">
+          <button class="test-button" onclick="sendMessageFromQuickTest('What are the best sweet spot deals today?')">
+            <h4>✈️ Sweet Spot Deals</h4>
+            <p>Discover premium flight deals using loyalty points</p>
+          </button>
+          <button class="test-button" onclick="sendMessageFromQuickTest('How do I transfer Chase points to United?')">
+            <h4>🔄 Points Transfer</h4>
+            <p>Learn about transferring credit card points to airlines</p>
+          </button>
+          <button class="test-button" onclick="sendMessageFromQuickTest('What is Pneuma and how does it work?')">
+            <h4>ℹ️ About Pneuma</h4>
+            <p>Get an overview of our flight booking platform</p>
+          </button>
+          <button class="test-button" onclick="sendMessageFromQuickTest('Any deals to Europe from NYC?')">
+            <h4>🌍 Route-Specific Deals</h4>
+            <p>Find deals for specific departure and destination cities</p>
+          </button>
+        </div>
+      </div>
+
+      <div class="status-panel">
+        <h3>🔧 System Status</h3>
+        <div class="status-message" id="systemStatus">
+          Checking connection...
+        </div>
+      </div>
+
+      <div class="info-panel">
+        <h3>💡 Demo Information</h3>
+        <ul>
+          <li>This is a prototype demonstration of Pneuma's AI assistant</li>
+          <li>Responses are generated for testing purposes and may not reflect real-time data</li>
+          <li>The assistant doesn't retain conversation history between sessions</li>
+          <li>Backend server must be running on localhost:5000 for full functionality</li>
+          <li>Real WhatsApp integration requires business API setup</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <p>&copy; 2024 Pneuma. Advanced flight booking and travel rewards optimization.</p>
+  </div>
+
+  <!-- Gemini API Key Modal -->
+  <div id="apiKeyModal">
+    <div class="modal-box">
+      <h3>Enter Gemini API Key</h3>
+      <input id="apiKeyInput" type="password" placeholder="Paste your API key here" />
+      <button onclick="saveApiKey()">Continue</button>
+    </div>
+  </div>
+
+  <!-- JS Logic -->
+  <script>
+    const chatMessages = document.getElementById('chatMessages');
+    const messageInput = document.getElementById('messageInput');
+    const sendButton = document.getElementById('sendButton');
+    const typingIndicator = document.getElementById('typingIndicator');
+    const statusMessageDiv = document.getElementById('statusMessage');
+    const systemStatusDiv = document.getElementById('systemStatus');
+
+    const API_BASE = window.location.origin;
+    let geminiApiKey = "";
+
+    function saveApiKey() {
+      const key = document.getElementById("apiKeyInput").value.trim();
+      if (!key) {
+        alert("Please enter a valid Gemini API key.");
+        return;
+      }
+      geminiApiKey = key;
+      document.getElementById("apiKeyModal").style.display = "none";
+    }
+
+    function displayMessage(text, sender) {
+      const messageDiv = document.createElement('div');
+      messageDiv.classList.add('message', `${sender}-message`);
+      messageDiv.textContent = text;
+      chatMessages.appendChild(messageDiv);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function showTypingIndicator(show) {
+      typingIndicator.style.display = show ? 'flex' : 'none';
+      if (show) {
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }
+    }
+
+    function updateStatus(message, type = '') {
+      statusMessageDiv.textContent = message;
+      statusMessageDiv.className = 'status-message';
+      if (type) {
+        statusMessageDiv.classList.add('status', type);
+      }
+      if (type !== 'loading') {
+        setTimeout(() => {
+          statusMessageDiv.textContent = '';
+          statusMessageDiv.className = 'status-message';
+        }, 5000);
+      }
+    }
+
+    function updateSystemStatus(message, type = '') {
+      systemStatusDiv.textContent = message;
+      systemStatusDiv.className = 'status-message';
+      if (type) {
+        systemStatusDiv.classList.add('status', type);
+      }
+    }
+
+    async function sendMessage(message) {
+      if (message.trim() === '') return;
+      if (!geminiApiKey) {
+        alert("Please enter your Gemini API key to continue.");
+        return;
+      }
+
+      displayMessage(message, 'user');
+      messageInput.value = '';
+      sendButton.disabled = true;
+      showTypingIndicator(true);
+      updateStatus('Processing your request...', 'loading');
+
+      try {
+        const response = await fetch(`${API_BASE}/test`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ message, api_key: geminiApiKey })
+        });
+
+        if (!response.ok) {
+          throw new Error(`Server error: ${response.status}`);
+        }
+
+        const data = await response.json();
+        displayMessage(data.response, 'bot');
+        updateStatus('Response received successfully', 'success');
+
+      } catch (error) {
+        console.error('Error sending message:', error);
+        displayMessage("I apologize, but I'm unable to connect to our servers right now. Please ensure the backend service is running and try again.", 'bot');
+        updateStatus(`Connection error: ${error.message}`, 'error');
+      } finally {
+        sendButton.disabled = false;
+        showTypingIndicator(false);
+      }
+    }
+
+    sendButton.addEventListener('click', () => {
+      sendMessage(messageInput.value);
+    });
+
+    messageInput.addEventListener('keypress', (event) => {
+      if (event.key === 'Enter') {
+        sendMessage(messageInput.value);
+      }
+    });
+
+    function sendMessageFromQuickTest(message) {
+      messageInput.value = message;
+      sendMessage(message);
+    }
+
+    async function checkHealth() {
+      try {
+        const response = await fetch(`${API_BASE}/health`);
+        if (response.ok) {
+          const data = await response.json();
+          if (data.status === 'healthy') {
+            updateSystemStatus('✅ Backend service is running', 'success');
+          } else {
+            updateSystemStatus('⚠️ Backend service issues detected', 'error');
+          }
+        } else {
+          updateSystemStatus(`❌ Backend service error (${response.status})`, 'error');
+        }
+      } catch (error) {
+        updateSystemStatus('❌ Backend service not reachable', 'error');
+        console.error('Health check failed:', error);
+      }
+    }
+
+    window.onload = () => {
+      checkHealth();
+      messageInput.focus();
+      document.getElementById("apiKeyModal").style.display = "flex";
+    };
+  </script>
+</body>
+</html>
